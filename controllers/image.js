@@ -1,5 +1,7 @@
 import User from '../models/user.js';
 import Image from '../models/image.js';
+import fs from 'fs';
+import path from 'path';
 
 async function uploadImage(req, res) {
 	const image = new Image();
@@ -28,7 +30,7 @@ async function uploadImage(req, res) {
 	}
 }
 
-async function getImageFile(req, res) {
+async function getImageFileFromUser(req, res) {
 	const userId = req.params.id;
 
 	try {
@@ -39,7 +41,30 @@ async function getImageFile(req, res) {
 	} catch (error) {
 		console.log(error)
 	}
-
 }
 
-export { uploadImage, getImageFile }
+async function getImage(req, res) {
+	const imageFile = req.params.imageFile;
+	const pathFile = `./uploads/users/${imageFile}.jpeg`;
+
+	try {
+		if (fs.existsSync(pathFile)) {
+			await res.sendFile(path.resolve(pathFile))
+		}
+	} catch (error) {
+		console.log(error)
+	}
+}
+
+async function deleteImage(req, res) {
+	const imageId = req.params.id;
+
+	try {
+		const deletedImage = await Image.findByIdAndRemove(imageId)
+		res.send(deletedImage)
+	} catch (error) {
+		console.log(error)
+	}
+}
+
+export { uploadImage, getImageFileFromUser, getImage, deleteImage }
