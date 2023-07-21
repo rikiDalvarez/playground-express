@@ -1,7 +1,7 @@
 import express from "express"
 
 const api = express.Router()
-import { uploadImage } from "../controllers/image.js"
+import { uploadImage, getImageFile } from "../controllers/image.js"
 import { test, saveUser, getUser, getAllUsers, updateUser, deleteUser } from "../controllers/user.js"
 import multiparty from "connect-multiparty"
 
@@ -15,6 +15,7 @@ api.get("/users", getAllUsers)
 api.put("/update/:id", updateUser)
 api.delete("/delete/:id", deleteUser)
 api.post("/upload-image-user/:id", [md_upload], uploadImage)
+api.get("/get-image-user/:id", [md_upload], getImageFile)
 
 
 export default api;
